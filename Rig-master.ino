@@ -51,6 +51,7 @@ byte Hrate_total_HTML_flag = 0;
 int nbr_esp32_HTML_affich = 0;
 int Hrate_total_HTML_affich = 0;
 
+/*
 #define RESET_ESP01 4
 #define RESET_ESP02 5
 #define RESET_ESP03 12
@@ -63,7 +64,7 @@ int Hrate_total_HTML_affich = 0;
 #define RESET_ESP10 19
 #define RESET_ESP11 25
 #define RESET_ESP12 27
-
+*/
 void scanI2CDevices();
 void affich_oled();
 void handleRoot();
@@ -76,6 +77,7 @@ void handleRoot();
 *************************************************************************/
 
 void setup() {
+/*
   pinMode(RESET_ESP01, OUTPUT);   digitalWrite(RESET_ESP01, HIGH);
   pinMode(RESET_ESP02, OUTPUT);   digitalWrite(RESET_ESP02, HIGH);
   pinMode(RESET_ESP03, OUTPUT);   digitalWrite(RESET_ESP03, HIGH);
@@ -88,7 +90,7 @@ void setup() {
   pinMode(RESET_ESP10, OUTPUT);   digitalWrite(RESET_ESP10, HIGH);
   pinMode(RESET_ESP11, OUTPUT);   digitalWrite(RESET_ESP11, HIGH);
   pinMode(RESET_ESP12, OUTPUT);   digitalWrite(RESET_ESP12, HIGH);
-
+*/
 
   Serial.begin(115200);
   Wire.begin();  // Initialiser le bus I2C en tant que maître
@@ -245,27 +247,10 @@ void scanI2CDevices() {
 *************************************************************************/
 
 void handleRoot() {   // Fonction pour gérer la racine de la page web
- // String html = "<html><head><title>DUCO-rig ESP32</title>";
-String html PROGMEM =  "<html><head><title>DUCO-rig ESP32</title>";
-/*  html += "<script>";
-  html += "var timeLeft = 10;";  // Décompt Serial.print("i+1= ");    Serial.println(i+1);e de 3 secondes
-  html += "function countdown() {";
-  html += "  document.getElementById('countdown').innerHTML = 'Refresh in ' + timeLeft + ' seconds';";
-  html += "  document.getElementById('progressBar').value = timeLeft;";  // Met à jour la barre de progression
-  html += "  if (timeLeft <= 0) {";
-  html += "    clearInterval(timerId);";
-  html += "    location.reload();";  // Rafraîchit la page après le décompte
-  html += "  } else {";
-  html += "    timeLeft--;";  // Décrémente le temps restant
-  html += "  }";
-  html += "}";
-*/
-//  html += "var timerId = setInterval(countdown, 1000);";  // Déclenche le décompte chaque seconde
-//  html += "</script>";
+  String html PROGMEM =  "<html><head><title>DUCO-rig ESP32</title>";
   html += "</head><body onload='countdown()' style='background-color: #FFFFE0; position: relative; min-height: 100vh;'>";  // Fond jaune pâle (#FFFFE0)
 
   html += "<div style='text-align: center;'>";  // Centrer le titre et la variable
-//  html += "<h1>DUCO-rig : " + String(nbr_esp32_HTML_affich) + " x ESP32 -> " + String(Hrate_total_HTML_affich, 3) + " MHs</h1>";  // Nouveau titre
   html += "<h1>DUCO-rig : " + String(nbr_esp32_HTML_affich) + " x ESP32 -> " + String(Hrate_total, 3) + " MHs</h1>";  // Nouveau titre
 
   html += "<p style='text-align: center;'>&copy; 2024 ON5CG</p>";  // Copyright centré
@@ -278,129 +263,11 @@ String html PROGMEM =  "<html><head><title>DUCO-rig ESP32</title>";
     if ((devicesInfo[i] != "")  or (devicesInfo[i].substring(17, 18) !="0")){
       html += devicesInfo[i];  // Affiche la chaîne de caractères recueillie
       Serial.print(i+1); Serial.print(" -> substring = "); Serial.println(devicesInfo[i].substring(17, 18));
-    } //else
-    if (devicesInfo[i].substring(17, 18) ="0"){
+    } 
 
-      //html += "-----------";  // prévoir de calculer le nombre de reset
-      Serial.print("i= "); Serial.print(i);
-      // Utiliser switch...case
-      switch (i+1){
-/*        case 1:
-          Serial.print("reset du ESP "); Serial.println(i+1);
-          html += "--RST 01--";  // prévoir de calculer le nombre de reset
-          digitalWrite(RESET_ESP01, LOW); //reset, prévoir reset spécifique esp32 'i+1'
-          delay(20);
-          digitalWrite(RESET_ESP01, HIGH);
-          break;
-
-        case 2:
-          Serial.print("reset du ESP "); Serial.println(i+1);
-          html += "--RST 02--";  // prévoir de calculer le nombre de reset
-          digitalWrite(RESET_ESP02, LOW); //reset, prévoir reset spécifique esp32 'i+1'
-          delay(20);
-          digitalWrite(RESET_ESP02, HIGH);
-          break;
-
-        case 3:
-          Serial.print("reset du ESP "); Serial.println(i+1);
-          html += "--RST 03--";  // prévoir de calculer le nombre de reset
-          digitalWrite(RESET_ESP03, LOW); //reset, prévoir reset spécifique esp32 'i+1'
-          delay(20);
-          digitalWrite(RESET_ESP03, HIGH);
-          break;
-*/
-        case 4:
-          Serial.print("reset du ESP "); Serial.println(i+1);
-          html += "--RST 04--";  // prévoir de calculer le nombre de reset
-          digitalWrite(RESET_ESP04, LOW); //reset, prévoir reset spécifique esp32 'i+1'
-          delay(50);
-          digitalWrite(RESET_ESP04, HIGH);
-          break;
-/*
-        case 5:
-          Serial.print("reset du ESP "); Serial.println(i+1);
-          html += "--RST 05--";  // prévoir de calculer le nombre de reset
-          digitalWrite(RESET_ESP05, LOW); //reset, prévoir reset spécifique esp32 'i+1'
-          delay(20);
-          digitalWrite(RESET_ESP05, HIGH);
-
-        case 6:
-          Serial.print("reset du ESP "); Serial.println(i+1);
-          html += "--RST 06--";  // prévoir de calculer le nombre de reset
-          digitalWrite(RESET_ESP06, LOW); //reset, prévoir reset spécifique esp32 'i+1'
-          delay(20);
-          digitalWrite(RESET_ESP06, HIGH);
-          break;
-
-        case 7:
-          Serial.print("reset du ESP "); Serial.println(i+1);
-          html += "--RST 07--";  // prévoir de calculer le nombre de reset
-          digitalWrite(RESET_ESP07, LOW); //reset, prévoir reset spécifique esp32 'i+1'
-          delay(20);
-          digitalWrite(RESET_ESP07, HIGH);
-          break;
-
-        case 8:
-          Serial.print("reset du ESP "); Serial.println(i+1);
-          html += "--RST 08--";  // prévoir de calculer le nombre de reset
-          digitalWrite(RESET_ESP08, LOW); //reset, prévoir reset spécifique esp32 'i+1'
-          delay(20);
-          digitalWrite(RESET_ESP08, HIGH);
-          break;
-
-        case 9:
-          Serial.print("reset du ESP "); Serial.println(i+1);
-          html += "--RST 09--";  // prévoir de calculer le nombre de reset
-          digitalWrite(RESET_ESP09, LOW); //reset, prévoir reset spécifique esp32 'i+1'
-          delay(20);
-          digitalWrite(RESET_ESP09, HIGH);
-
-        case 10:
-          Serial.print("reset du ESP "); Serial.println(i+1);
-          html += "--RST 10--";  // prévoir de calculer le nombre de reset
-          digitalWrite(RESET_ESP10, LOW); //reset, prévoir reset spécifique esp32 'i+1'
-          delay(20);
-          digitalWrite(RESET_ESP10, HIGH);
-          break;
-
-        case 11:
-          Serial.print("reset du ESP "); Serial.println(i+1);
-          html += "--RST 11--";  // prévoir de calculer le nombre de reset
-          digitalWrite(RESET_ESP11, LOW); //reset, prévoir reset spécifique esp32 'i+1'
-          delay(20);
-          digitalWrite(RESET_ESP11, HIGH);
-          break;
-
-        case 12:
-          Serial.print("reset du ESP "); Serial.println(i+1);
-          html += "--RST 12--";  // prévoir de calculer le nombre de reset
-          digitalWrite(RESET_ESP12, LOW); //reset, prévoir reset spécifique esp32 'i+1'
-          delay(20);
-          digitalWrite(RESET_ESP12, HIGH);
-          break;
-*/
-        default:
-          Serial.println("Valeur inattendue");
-          break;
-        }
-
-
-
-    }
-    html += "</div>";
+    html += "</body></html>";
+    server.send(200, "text/html", html);
+    nbr_esp32_HTML_flag = 0;
+    Hrate_total_HTML_flag = 0;
   }
-  // décompte et barre de progression
-  /*
-  html += "</div>";
-  html += "<div style='position: absolute; bottom: 10px; width: 100%; text-align: center;'>";
-  html += "<p id='countdown' style='display: inline-block; margin-right: 10px;'></p>";  // Décompte à gauche de la barre de progression
-  html += "<progress id='progressBar' value='0' max='10'></progress>";  // Barre de progression
-  html += "</div>";
-  */
-
-  html += "</body></html>";
-
-  server.send(200, "text/html", html);
-  nbr_esp32_HTML_flag = 0;
-  Hrate_total_HTML_flag = 0;
 }
