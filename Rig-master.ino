@@ -51,20 +51,6 @@ byte Hrate_total_HTML_flag = 0;
 int nbr_esp32_HTML_affich = 0;
 int Hrate_total_HTML_affich = 0;
 
-/*
-#define RESET_ESP01 4
-#define RESET_ESP02 5
-#define RESET_ESP03 12
-#define RESET_ESP04 13
-#define RESET_ESP05 14
-#define RESET_ESP06 15
-#define RESET_ESP07 16
-#define RESET_ESP08 17
-#define RESET_ESP09 18
-#define RESET_ESP10 19
-#define RESET_ESP11 25
-#define RESET_ESP12 27
-*/
 void scanI2CDevices();
 void affich_oled();
 void handleRoot();
@@ -77,20 +63,6 @@ void handleRoot();
 *************************************************************************/
 
 void setup() {
-/*
-  pinMode(RESET_ESP01, OUTPUT);   digitalWrite(RESET_ESP01, HIGH);
-  pinMode(RESET_ESP02, OUTPUT);   digitalWrite(RESET_ESP02, HIGH);
-  pinMode(RESET_ESP03, OUTPUT);   digitalWrite(RESET_ESP03, HIGH);
-  pinMode(RESET_ESP04, OUTPUT);   digitalWrite(RESET_ESP04, HIGH);
-  pinMode(RESET_ESP05, OUTPUT);   digitalWrite(RESET_ESP05, HIGH);
-  pinMode(RESET_ESP06, OUTPUT);   digitalWrite(RESET_ESP06, HIGH);
-  pinMode(RESET_ESP07, OUTPUT);   digitalWrite(RESET_ESP07, HIGH);
-  pinMode(RESET_ESP08, OUTPUT);   digitalWrite(RESET_ESP08, HIGH);
-  pinMode(RESET_ESP09, OUTPUT);   digitalWrite(RESET_ESP09, HIGH);
-  pinMode(RESET_ESP10, OUTPUT);   digitalWrite(RESET_ESP10, HIGH);
-  pinMode(RESET_ESP11, OUTPUT);   digitalWrite(RESET_ESP11, HIGH);
-  pinMode(RESET_ESP12, OUTPUT);   digitalWrite(RESET_ESP12, HIGH);
-*/
 
   Serial.begin(115200);
   Wire.begin();  // Initialiser le bus I2C en tant que maître
