@@ -1,5 +1,12 @@
 /***************************************************
+Token, expire 06/02/2025 :
+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
+*****************************************************
+Activez le stockage des identifiants en permanence :
+git config --global credential.helper store
 
+Activez le stockage des identifiants sécurisé pendant 1 heure :
+git config --global credential.helper 'cache --timeout=3600'
 
 pour récupérer un projet entier :
 
@@ -11,7 +18,6 @@ git reset --hard origin/main
 
 
 En général :
-
 1. Vérifier l’état du dépôt : 
 git status
 2. Stager les modifications : 
@@ -25,6 +31,9 @@ git merge origin/<nom_de_branche>
 6. Mettre à jour la branche locale directement (remplace fetch et merge): 
 git pull
 7. Pousser les changements locaux : 
+git add .
+ou :
+git commit -a
 git push
 
 

@@ -10,7 +10,33 @@
 //#include <Adafruit_BusIO.h>
 #include <Adafruit_I2CDevice.h>
 #include <Adafruit_SSD1306.h>
-
+/*
+1-01
+2-02
+3-03
+4-04
+5-05
+6-06
+7-07
+8-08
+9-09
+10-0A
+11-0B
+12-0C
+13-0D
+14-0E
+15-0F
+16-10
+17-11
+18-12
+19-13-
+20-14
+21-15
+22-16
+23-17
+24-18
+25-19
+*/
 #define SCREEN_WIDTH 128  // Largeur de l'écran OLED
 #define SCREEN_HEIGHT 64  // Hauteur de l'écran OLED
 
@@ -169,7 +195,8 @@ void affich_oled() {
 *
 *************************************************************************/
 void scanI2CDevices() {
-  for (byte address = 1; address <= 30; address++) {
+  for (byte address = 0x01; address <= 0x19; address++) {
+    // convertir 'address' en hexa
     if (Wire.endTransmission() == 0) {  // Si l'adresse répond
       Wire.requestFrom(address, 40);  // Demande à l'esclave de lui envoyer son identifiant (40 caractères)
       String ident = "";
