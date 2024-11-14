@@ -1,16 +1,13 @@
-/*
+/***************************************************
 
 
-hhhgfd
-hg
-fhgfd
-hgfdhgfdhgfd
+pour récupérer un projet entier :
 
-hgf
+Établir la branche de suivi : 
+git branch --set-upstream-to=origin/main main
 
-hgfdd
-hgf
-
+Synchronisation avec le dépôt :
+git reset --hard origin/main
 
 
 
@@ -25,11 +22,4 @@ hgf
 
 
 
-
-
-
-
-
-
-
-*/
+**************************************************/
