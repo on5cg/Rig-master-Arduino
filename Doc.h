@@ -16,6 +16,8 @@ git branch --set-upstream-to=origin/main main
 Synchronisation avec le dépôt :
 git reset --hard origin/main
 
+Débloquer si erreur "Repository rule violations found for refs/heads/main":
+git commit --amend
 
 En général :
 1. Vérifier l’état du dépôt : 
