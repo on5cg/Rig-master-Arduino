@@ -38,27 +38,27 @@
 25-19
 */
 #define SCREEN_WIDTH 128  // Largeur de l'écran OLED
-#define SCREEN_HEIGHT 64  // Hauteur de l'écran OLED
+#define SCREEN_HEIGHT 32  // Hauteur de l'écran OLED
 
 // Définir l'adresse I2C de l'écran OLED (0x3C est une valeur courante)
 //const uint8_t slaveAddress = 0x3C;  // Adresse I2C unique de chaque ESP32 (modifiez-la pour chaque ESP32)
 #define OLED_RESET -1  // Il est possible que votre écran n'ait pas de reset, utilisez -1 si c'est le cas
 //Adafruit_SSD1306 display(SCREEN_WIDTH, SCREEN_HEIGHT, &Wire, OLED_RESET);
-Adafruit_SSD1306 afficheur(128, 64, &Wire, -1);
+Adafruit_SSD1306 afficheur(128, 32, &Wire, -1);
 
 
 // Configuration réseau
-const char* ssid = "WiFi-2.4-C980";        // SSID de votre réseau Wi-Fi
-//const char* password = "7bz51ii7";          // Mot de passe de votre réseau Wi-Fi
-//const char* ssid = "MikroTik-C6FD91";        // SSID de votre réseau Wi-Fi
+//const char* ssid = "WiFi-2.4-C980";        // SSID de votre réseau Wi-Fi
+const char* ssid = "MikroTik-C6FD91";        // SSID de votre réseau Wi-Fi
 const char* password = "7bz51ii7";          // Mot de passe de votre réseau Wi-Fi
-IPAddress local_IP(192, 168, 1, 189);       // Adresse IP statique
+
+IPAddress local_IP(192, 168, 1, 188);       // Adresse IP statique
 IPAddress gateway(192, 168, 1, 1);          // Adresse de la passerelle
 IPAddress subnet(255, 255, 255, 0);         // Masque de sous-réseau
 
 WebServer server(80);
 
-const unsigned long interval = 4000;       // Intervalle de temps entre chaque requête (4 secondes)
+const unsigned long interval = 3000;       // Intervalle de temps entre chaque requête (10 secondes)
 unsigned long previousMillis = 0;
 
 String devicesInfo[25];  // Tableau pour stocker les informations des ESP32 esclaves
@@ -119,10 +119,17 @@ void setup() {
   Serial.println("HTTP server started");
 
     // Initialisation de la communication I2C avec l'écran OLED
-/*  if(!display.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
+  if(!afficheur.begin(SSD1306_SWITCHCAPVCC, 0x3C)) {
     Serial.println(F("Échec de l'initialisation de l'écran SSD1306"));
     for(;;); // Boucle infinie si l'écran ne s'initialise pas correctement
-  }*/
+  }
+
+    // Show initial display buffer contents on the screen --
+  // the library initializes this with an Adafruit splash screen.
+  afficheur.display();
+  delay(2000); // Pause for 2 seconds
+
+
 
   afficheur.clearDisplay(); // Effacer le tampon de l'écran
   afficheur.setTextSize(2); // Définir la taille du texte
@@ -148,6 +155,7 @@ void setup() {
 *************************************************************************/
 
 void loop() {
+
   server.handleClient();
 
   unsigned long currentMillis = millis();
@@ -180,10 +188,10 @@ void affich_oled() {
 
   // Afficher le texte
 	afficheur.print(Hrate_total,3); afficheur.println(" MHs");
-	afficheur.setTextSize(2);
-	afficheur.println("");
+//	afficheur.setTextSize(2);
+//	afficheur.println("");
   //display.print(sec_moyenne,1);
-	afficheur.print("ESP :"); afficheur.print(nbr_esp32_ok,0); afficheur.println("/25");
+//	afficheur.print("ESP :"); afficheur.print(nbr_esp32_ok,0); afficheur.println("/25");
 
 	afficheur.display();  // Afficher le contenu du tampon sur l'écran
 }
@@ -191,11 +199,12 @@ void affich_oled() {
 
 /************************************************************************
 *
-*  scanI2CDevices
+*  scanI2CDevices : sera utilisé pour les rst
 *
 *************************************************************************/
 void scanI2CDevices() {
-  for (byte address = 0x01; address <= 0x19; address++) {
+  for (byte address = 1; address <= 25; address++) {
+//  for (byte address = 0x01; address <= 0x19; address++) {
     // convertir 'address' en hexa
     if (Wire.endTransmission() == 0) {  // Si l'adresse répond
       Wire.requestFrom(address, 40);  // Demande à l'esclave de lui envoyer son identifiant (40 caractères)
@@ -244,29 +253,44 @@ void scanI2CDevices() {
 *  PAGE WEB
 *
 *************************************************************************/
+void handleRoot() {
+  String html = R"rawliteral(
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <title>DUCO-rig ESP32</title>
+        <style>
+          body {
+            background-color: yellow;
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+          }
+          h1 {
+            text-align: center;
+            margin-top: 20px;
+          }
+          .line {
+            margin-left: 20px;
+            margin-top: 10px;
+            font-size: 18px;
+          }
+        </style>
+      </head>
+      <body>
+        <h1>DUCO-rig ESP32</h1>
+        <div>
+  )rawliteral";
 
-void handleRoot() {   // Fonction pour gérer la racine de la page web
-  String html PROGMEM =  "<html><head><title>DUCO-rig ESP32</title>";
-  html += "</head><body onload='countdown()' style='background-color: #FFFFE0; position: relative; min-height: 100vh;'>";  // Fond jaune pâle (#FFFFE0)
-
-  html += "<div style='text-align: center;'>";  // Centrer le titre et la variable
-  html += "<h1>DUCO-rig : " + String(nbr_esp32_HTML_affich) + " x ESP32 -> " + String(Hrate_total, 3) + " MHs</h1>";  // Nouveau titre
-
-  html += "<p style='text-align: center;'>&copy; 2024 ON5CG</p>";  // Copyright centré
-  html += "<div style='display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px;'>";
-
-  for (int i = 0; i < 25; i++) {
-    Serial.print(i+1); Serial.print(" -> deviceinfo : "); Serial.println(devicesInfo[i]);
-    html += "<div style='border: 1px solid black; padding: 20px; text-align: center;'>";
-    html += "ESP " + String(i + 1) + "<br>";  // Numérote les positions de 1 à 25
-    if ((devicesInfo[i] != "")  or (devicesInfo[i].substring(17, 18) !="0")){
-      html += devicesInfo[i];  // Affiche la chaîne de caractères recueillie
-      Serial.print(i+1); Serial.print(" -> substring = "); Serial.println(devicesInfo[i].substring(17, 18));
-    } 
-
-    html += "</body></html>";
-    server.send(200, "text/html", html);
-    nbr_esp32_HTML_flag = 0;
-    Hrate_total_HTML_flag = 0;
+  for (int i = 1; i <= 25; i++) {
+    html += "<div class='line'>" + String(i < 10 ? "0" : "") + String(i) + " - </div>";
   }
+
+  html += R"rawliteral(
+        </div>
+      </body>
+    </html>
+  )rawliteral";
+
+  server.send(200, "text/html", html);
 }
