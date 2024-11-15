@@ -49,10 +49,10 @@ Adafruit_SSD1306 afficheur(128, 64, &Wire, -1);
 
 // Configuration réseau
 const char* ssid = "WiFi-2.4-C980";        // SSID de votre réseau Wi-Fi
-const char* password = "7bz51ii7";          // Mot de passe de votre réseau Wi-Fi
-//const char* ssid = "MikroTik-C6FD91";        // SSID de votre réseau Wi-Fi
 //const char* password = "7bz51ii7";          // Mot de passe de votre réseau Wi-Fi
-IPAddress local_IP(192, 168, 1, 190);       // Adresse IP statique
+//const char* ssid = "MikroTik-C6FD91";        // SSID de votre réseau Wi-Fi
+const char* password = "7bz51ii7";          // Mot de passe de votre réseau Wi-Fi
+IPAddress local_IP(192, 168, 1, 189);       // Adresse IP statique
 IPAddress gateway(192, 168, 1, 1);          // Adresse de la passerelle
 IPAddress subnet(255, 255, 255, 0);         // Masque de sous-réseau
 
@@ -95,7 +95,7 @@ void setup() {
   Serial.println("Master started...");
 
   // Configuration du WiFi
-  WiFi.config(local_IP, gateway, subnet);
+  //WiFi.config(local_IP, gateway, subnet);
   WiFi.begin(ssid, password);
 
   while (WiFi.status() != WL_CONNECTED) {
